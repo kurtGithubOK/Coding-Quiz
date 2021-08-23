@@ -1,3 +1,87 @@
 body {
-    background-color: cornflowerblue;
+    /* background-color: cornflowerblue; */
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.5em;
 }
+
+* {
+    margin: 5px;
+    padding: 10px;    
+}
+
+header {
+    border: 1px solid blue;
+    background-color: lightblue;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+#high-scores {
+    border: 1px solid blue;
+    background-color: lightblue;
+}
+
+#timer {
+    border: 1px solid blue;
+    background-color: lightblue;
+}
+
+
+main {
+    border: 1px solid blue;
+    background-color: lightblue;
+    
+}
+
+#main-text {
+    border: 1px solid blue;
+    background-color: lightblue;
+    text-align: center;
+}
+
+#sub-text {
+    border: 1px solid blue;
+    background-color: lightblue;
+}
+
+#start-button {
+    border: 1px solid blue;
+    background-color: lightblue;
+}
+
+#question {
+    border: 1px solid blue;
+    background-color: lightblue;
+}
+
+#answers {
+    border: 1px solid blue;
+    background-color: lightblue;
+}
+
+#email-form {
+    border: 1px solid blue;
+    background-color: lightblue;
+}
+
+#high-score-list {
+    border: 1px solid blue;
+    background-color: lightblue;
+}
+
+#go-back {
+    border: 1px solid blue;
+    background-color: lightblue;
+}
+
+
+
+
+
+
+
+
+
+
+
