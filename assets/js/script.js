@@ -8,6 +8,7 @@
 // GLOBAL VARIABLES ...
 let globalTimer = 0;
 let score = 0;
+let currentQuestionIndex = 0;
 
 // Variables for buttons.
 const highScoresButton = document.getElementById('high-scores');
@@ -55,6 +56,15 @@ let data = {
             ],
             correctAnswer: 1
         },
+        {
+            question: "this is question #2!?",
+            answers: [
+                "chicken",
+                "susan burns",
+                "have to cancele somehow?"
+            ],
+            correctAnswer: 2
+        }
     ],
     views: {
         start: [mainTextDiv, subTextDiv, startButtonDiv],
@@ -67,7 +77,6 @@ let data = {
 
 // FUNCTIONS THAT SHOW VIEWS //////////////////////////////////////////////////
 function showStartView() {
-    // Turn on divs in view.
     updateView('start');
     mainTextDiv.textContent = 'Coding Quiz Challenge';
     subTextDiv.textContent = 'Try to answer the following code-related question within the time limit.' +
@@ -75,9 +84,22 @@ function showStartView() {
 }
 function showQuestionView() {
     updateView('question');
-    // get Q from data.
-    // Show q and answers
-    // show pass/fail thing.
+    // Get Q&A from data.
+    const questionData = data.questions[currentQuestionIndex];
+    // Show Q&A.
+    questionDiv.textContent = questionData.question;
+
+    const answers = questionData.answers;
+    let ul = document.createElement('ul');
+    answersDiv.append(ul);
+    for(let answer of answers) {
+        const li = document.createElement('li');
+        li.textContent = answer;
+        ul.append(li);
+
+        console.log(answer)
+
+    }
 }
 function showDoneView() {
     updateView('done');
@@ -111,6 +133,8 @@ function answerClicked() {
 }
 function nextQuestionClicked() {
     console.log('now in nextQuestionClicked')
+        // show pass/fail thing.
+
     showDoneView();
 }
 function submitClicked() { // rename?
@@ -134,7 +158,8 @@ function viewHighScoresClicked() {
 
 // UTILITY FUNCTIONS //////////////////////////////////////////////////
 function init() {
-    showStartView();
+    //showStartView();
+showQuestionView();
 }
 function updateView(targetView) {
     // Turn all divs off.
