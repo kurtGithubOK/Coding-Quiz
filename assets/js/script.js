@@ -94,11 +94,12 @@ function showQuestionView() {
     answersDiv.append(ul);
     for(let answer of answers) {
         const li = document.createElement('li');
-        li.textContent = answer;
-        ul.append(li);
+        // li.textContent = answer;
+        const button = document.createElement("button");
+        button.innerHTML = answer;
+        li.appendChild(button);
 
-        console.log(answer)
-
+        ul.appendChild(li);
     }
 }
 function showDoneView() {
