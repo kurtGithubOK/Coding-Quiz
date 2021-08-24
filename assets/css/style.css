@@ -60,6 +60,11 @@ main {
     background-color: lightblue;
 }
 
+#right-wrong {
+    border: 1px solid blue;
+    background-color: lightblue;
+}
+
 #email-form {
     border: 1px solid blue;
     background-color: lightblue;

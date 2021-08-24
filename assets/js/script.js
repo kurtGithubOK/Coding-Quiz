@@ -3,24 +3,28 @@
     For each view, divs wrap elements that make up the view.
     Nav consists of turning those divs on & off, then populating 
     any parts with data. 
-*/
+    Started at bottom once above has been loaded.
+    */
 // GLOBAL VARIABLES ...
 let globalTimer = 0;
 let score = 0;
+
 // Variables for buttons.
 const highScoresButton = document.getElementById('high-scores');
 const startButton = document.getElementById('startButton');
 const goBackButton = document.getElementById('goBackButton');
 const clearButton = document.getElementById('clearButton');
 const submitButton = document.getElementById('submit');
-const mainDivs = document.querySelector('main').children;
+const nextQuestionButton = document.getElementById('nextQuestion');
 
-// Variables for views.
+// Variables for views that get turned on/off.
+const mainDivs = document.querySelector('main').children;
 const mainTextDiv = document.getElementById('main-text');
 const subTextDiv = document.getElementById('sub-text');
 const startButtonDiv = document.getElementById('start-button');
 const questionDiv = document.getElementById('question');
 const answersDiv = document.getElementById('answers');
+const rightWrongDiv = document.getElementById('right-wrong');
 const emailFormDiv = document.getElementById('email-form');
 const highScoreListDiv = document.getElementById('high-score-list');
 const goBackClearDiv = document.getElementById('go-back-clear');
@@ -29,11 +33,12 @@ const goBackClearDiv = document.getElementById('go-back-clear');
 // Adding event listeners.
 highScoresButton.addEventListener('click', viewHighScoresClicked);
 startButton.addEventListener('click', startClicked);
+submitButton.addEventListener('click', submitClicked);
+nextQuestionButton.addEventListener('click', nextQuestionClicked);
 goBackButton.addEventListener('click', goBackClicked);
 clearButton.addEventListener('click', clearClicked);
-submitButton.addEventListener('click', submitClicked);
 
-// DATA ...
+// DATA //////////////////////////////////////////////////////////////////
 let data = {
     scores: [
         { initials: "KH", score: 8 },
@@ -53,9 +58,9 @@ let data = {
     ],
     views: {
         start: [mainTextDiv, subTextDiv, startButtonDiv],
-        question: [questionDiv, answersDiv],
-        done: [emailFormDiv],
-        highscores: [highScoreListDiv, goBackClearDiv]
+        question: [questionDiv, answersDiv, rightWrongDiv],
+        done: [mainTextDiv, subTextDiv, emailFormDiv],
+        highscores: [mainTextDiv, subTextDiv, highScoreListDiv, goBackClearDiv]
     }
 };
 
@@ -64,26 +69,35 @@ let data = {
 function showStartView() {
     // Turn on divs in view.
     updateView('start');
+    mainTextDiv.textContent = 'Coding Quiz Challenge';
+    subTextDiv.textContent = 'Try to answer the following code-related question within the time limit.' +
+    'Keep in mind that incorrect answers will penalize you score/time by ten seconds!';
 }
 function showQuestionView() {
+    updateView('question');
     // get Q from data.
     // Show q and answers
     // show pass/fail thing.
 }
 function showDoneView() {
-    // ????
+    updateView('done');
+    // Update text content.
+    mainTextDiv.textContent = 'All Done!';
+    subTextDiv.textContent = 'Your score is XXX'
 }
 function showHighScoresView() {
     console.log('now in showHighScores()')
+    updateView('highscores');
+    mainTextDiv.textContent = 'Highscores';
     // Get list of scores
     // Display list of <li> tags.
-    // Show GOBACK & CLEAR buttons
 }
 
 
 // EVENT HANDLERS //////////////////////////////////////////////////
 function startClicked() {
     console.log('now in startClicked()')
+    showQuestionView();
 
     // chnage view to question
 }
@@ -95,15 +109,19 @@ function answerClicked() {
     // if wrong, decrement timer
     // showDone()
 }
-function submitClicked() {
+function nextQuestionClicked() {
+    console.log('now in nextQuestionClicked')
+    showDoneView();
+}
+function submitClicked() { // rename?
     console.log('now in submitClicked()')
     // get values
     // save it
-    // showHighScores()
+    showHighScoresView();
 }
 function goBackClicked() {
     console.log('now in goBackClicked()')
-
+    showStartView();
 }
 function clearClicked() {
     console.log('now in clearClicked()')
@@ -115,14 +133,17 @@ function viewHighScoresClicked() {
 }
 
 // UTILITY FUNCTIONS //////////////////////////////////////////////////
+function init() {
+    showStartView();
+}
 function updateView(targetView) {
     // Turn all divs off.
-    for(let mainDiv of mainDivs) {
+    for (let mainDiv of mainDivs) {
         mainDiv.style.display = 'none';
     }
     // Turn on divs in target view.
     const viewDivs = data.views[targetView];
-    for(let div of viewDivs) {
+    for (let div of viewDivs) {
         div.style.display = 'block';
     }
 }
@@ -139,8 +160,5 @@ function endGame() {
     // 
 }
 
-// Display home page view.
-showStartView();
-// mainDivs[0].style.display = 'none';
-// mainTextDiv.style.display = 'block';
-// console.log('mainDivs', mainDivs)
+// Start the app.
+init();
