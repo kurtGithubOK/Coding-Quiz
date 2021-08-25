@@ -116,6 +116,8 @@ function showQuestionView() {
     if (answersDiv.hasChildNodes()) {
         answersDiv.removeChild(answersDiv.childNodes[0])
     }
+    rightWrongDiv.style.display = 'none';
+
     answersUl = document.createElement('ul');
     answersUl.setAttribute('id', 'answer-list');
     answersDiv.append(answersUl);
@@ -143,7 +145,11 @@ function showHighScoresView() {
     // Get list of scores
     // Display list of <li> tags.
 }
-
+function showRightWrongMessage(isCorrectAnswer) {
+    const result = isCorrectAnswer ? "Right!" : "Wrong";
+    rightWrongDiv.style.display = 'block';
+    rightWrongDiv.textContent = result;
+}
 
 // EVENT HANDLERS //////////////////////////////////////////////////
 function startClicked() {
@@ -160,19 +166,24 @@ function answerClicked(event) {
     // Check answer
     const userAnswerId = target.attributes.getNamedItem('data-answer-index').value;
     const correctAnswerId = data.questions[currentQuestionIndex].correctAnswer;
-    if (userAnswerId === correctAnswerId) {
+    const isCorrectAnswer = parseInt(userAnswerId) === correctAnswerId;
+    if (isCorrectAnswer) {
         score++;
     } else {
         globalTimer -= 10;
     }
+    showRightWrongMessage(isCorrectAnswer);
 
-    // Are we out of questions?
-    if (currentQuestionIndex === data.questions.length - 1) {
-        showDoneView();
-    } else {
-        currentQuestionIndex++;
-        showQuestionView();
-    }
+    // Display right/wrong for 3 seconds before proceeding.
+    setTimeout(() => {
+        // Are we out of questions?
+        if (currentQuestionIndex === data.questions.length - 1) {
+            showDoneView();
+        } else {
+            currentQuestionIndex++;
+            showQuestionView();
+        }
+    }, 2000);
 }
 function nextQuestionClicked() {
     console.log('now in nextQuestionClicked')
@@ -220,9 +231,6 @@ function startTimer() {
     // setTimeout()
     // if global < 0, then clearTimeout & endGame()
     return;
-}
-function decrementTime(howMuch) {
-    // reduce global
 }
 function endGame() {
     // 
