@@ -91,7 +91,7 @@ let data = {
         start: [mainTextDiv, subTextDiv, startButtonDiv],
         question: [questionDiv, answersDiv, rightWrongDiv],
         done: [mainTextDiv, subTextDiv, emailFormDiv],
-        highscores: [mainTextDiv, subTextDiv, highScoreListDiv, goBackClearDiv]
+        highscores: [mainTextDiv, highScoreListDiv, goBackClearDiv]
     }
 };
 
@@ -139,11 +139,21 @@ function showDoneView() {
     subTextDiv.textContent = 'Your score is XXX'
 }
 function showHighScoresView() {
-    console.log('now in showHighScores()')
     updateView('highscores');
     mainTextDiv.textContent = 'Highscores';
     // Get list of scores
+    const highscores = data.scores;
+
     // Display list of <li> tags.
+    const highscoresUl = document.createElement('ul');
+    highscoresUl.setAttribute('id', 'highscores-ul');
+    highScoreListDiv.append(highscoresUl);
+    for(let i=0 ; i<highscores.length ; i++) {
+        const li = document.createElement('li');
+        li.innerHTML = highscore.initials + " - " + highscore.score;
+        highscoresUl.append(li);
+    }
+    console.log('now in showHighScores()', data.scores)
 }
 function showRightWrongMessage(isCorrectAnswer) {
     const result = isCorrectAnswer ? "Right!" : "Wrong";
@@ -206,20 +216,28 @@ function clearClicked() {
 
 }
 function viewHighScoresClicked() {
-    console.log('now in viewHighScores()')
-    // just showHightscores()
+    showHighScoresView();
 }
 
 // UTILITY FUNCTIONS //////////////////////////////////////////////////
 function init() {
     //showStartView();
-    showQuestionView();
+    showHighScoresView();
 }
 function updateView(targetView) {
     // Turn all divs off.
     for (let mainDiv of mainDivs) {
         mainDiv.style.display = 'none';
     }
+
+    // Don't display header if in highscores view.
+    const headerDiv = document.querySelector('header')
+    if(targetView === "highscores") {
+        headerDiv.style.display = 'none';
+    } else {
+        headerDiv.style = 'header';
+    }
+
     // Turn on divs in target view.
     const viewDivs = data.views[targetView];
     for (let div of viewDivs) {
