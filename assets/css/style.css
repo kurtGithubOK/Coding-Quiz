@@ -74,6 +74,11 @@ main {
     background-color: lightblue;
 }
 
+#high-score-list li {
+    background-color: purple;
+    list-style-type: none;
+}
+
 #go-back-clear {
     border: 1px solid blue;
     background-color: lightblue;

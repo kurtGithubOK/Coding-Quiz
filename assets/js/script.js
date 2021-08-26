@@ -7,7 +7,7 @@
     */
 // GLOBAL VARIABLES ...
 let globalTimer = 0;
-let score = 0;
+let userScore = 0;
 let currentQuestionIndex = 0;
 
 // Variables for buttons.
@@ -45,6 +45,7 @@ let data = {
         { initials: "OY", score: 4 },
         { initials: "NG", score: 11 }
     ],
+
     questions: [
         {
             question: "Which of the following is NOT a JS data type?",
@@ -98,6 +99,10 @@ let data = {
 
 // FUNCTIONS THAT SHOW VIEWS //////////////////////////////////////////////////
 function showStartView() {
+    // Reset score & timer for next game.
+    userScore = 0;
+    currentQuestionIndex = 0;
+    // Show divs that make up this div and populate their text.
     updateView('start');
     mainTextDiv.textContent = 'Coding Quiz Challenge';
     subTextDiv.textContent = 'Try to answer the following code-related question within the time limit.' +
@@ -136,27 +141,30 @@ function showDoneView() {
     updateView('done');
     // Update text content.
     mainTextDiv.textContent = 'All Done!';
-    subTextDiv.textContent = 'Your score is XXX'
+    subTextDiv.textContent = 'Your score is:' + userScore;
 }
 function showHighScoresView() {
     updateView('highscores');
     mainTextDiv.textContent = 'Highscores';
-    // Get list of scores
-    const highscores = data.scores;
 
+    // Get list of scores
+    const highscores = getScores();
+    // Clear out any existing <li> tags.
+    if (highScoreListDiv.hasChildNodes()) {
+        highScoreListDiv.removeChild(highScoreListDiv.childNodes[0]);
+    }
     // Display list of <li> tags.
-    const highscoresUl = document.createElement('ul');
+    highscoresUl = document.createElement('ul');
     highscoresUl.setAttribute('id', 'highscores-ul');
     highScoreListDiv.append(highscoresUl);
-    for(let i=0 ; i<highscores.length ; i++) {
+    for (let i = 0; i < highscores.length; i++) {
         const li = document.createElement('li');
-        li.innerHTML = highscore.initials + " - " + highscore.score;
+        li.innerHTML = (i + 1) + '. ' + highscores[i].initials + " - " + highscores[i].score;
         highscoresUl.append(li);
     }
-    console.log('now in showHighScores()', data.scores)
 }
 function showRightWrongMessage(isCorrectAnswer) {
-    const result = isCorrectAnswer ? "Right!" : "Wrong";
+    const result = isCorrectAnswer ? "Right!" : "Wrong :(";
     rightWrongDiv.style.display = 'block';
     rightWrongDiv.textContent = result;
 }
@@ -178,7 +186,7 @@ function answerClicked(event) {
     const correctAnswerId = data.questions[currentQuestionIndex].correctAnswer;
     const isCorrectAnswer = parseInt(userAnswerId) === correctAnswerId;
     if (isCorrectAnswer) {
-        score++;
+        userScore++;
     } else {
         globalTimer -= 10;
     }
@@ -193,7 +201,7 @@ function answerClicked(event) {
             currentQuestionIndex++;
             showQuestionView();
         }
-    }, 2000);
+    }, 1500);
 }
 function nextQuestionClicked() {
     console.log('now in nextQuestionClicked')
@@ -201,19 +209,23 @@ function nextQuestionClicked() {
 
     showDoneView();
 }
-function submitClicked() { // rename?
-    console.log('now in submitClicked()')
+function submitClicked() {
     // get values
+    const initials = document.getElementById('initialsTextfield').value;
     // save it
+    const scoreObject = {
+        initials: initials,
+        score: userScore
+    };
+    updateScores(scoreObject);
     showHighScoresView();
 }
 function goBackClicked() {
-    console.log('now in goBackClicked()')
     showStartView();
 }
 function clearClicked() {
-    console.log('now in clearClicked()')
-
+    updateScores(null);
+    showHighScoresView();
 }
 function viewHighScoresClicked() {
     showHighScoresView();
@@ -221,9 +233,52 @@ function viewHighScoresClicked() {
 
 // UTILITY FUNCTIONS //////////////////////////////////////////////////
 function init() {
-    //showStartView();
-    showHighScoresView();
+    showStartView();
+    //    localStorage.setItem('code-quiz-scores', JSON.stringify(data.scores))
 }
+// console.log('hi')
+// localStorage.setItem('code-quiz-scores', JSON.stringify(data.scores))
+// const myScores = localStorage.getItem('code-quiz-scores');
+// console.log('myScores', myScores)
+// const parsedScores = JSON.parse(myScores);
+// console.log('parsedScores', parsedScores);
+// for(let i=0 ; i<parsedScores.length ; i++) {
+//     console.log('iter:', parsedScores[i].score)
+// }
+// const mySortedScores = parsedScores.sort((element1, element2) => {
+//     return element1.score - element2.score;
+// });
+// for(let i=0 ; i<mySortedScores.length ; i++) {
+//     console.log('mySortedScores:', mySortedScores[i].score)
+// }
+
+
+
+
+function getScores() {
+    // Get scores from local storage or empty array if undefined.
+    const scores = localStorage.getItem('code-quiz-scores');
+    if (!scores) return [];
+    // console.log('type:', typeof scores)
+    // console.log('scores:', scores)
+    return JSON.parse(scores);
+}
+function updateScores(score) {
+    let updatedScores = [];
+    // If arg is empty object, must want to clear high scores.
+    if (score) {
+        // Append new score to existing array.
+        const scores = getScores();
+        scores.push(score);
+        // Sort it by score.
+        updatedScores = scores.sort((element1, element2) => {
+            return element2.score - element1.score;
+        });
+    }
+    // Set value in local storage.
+    localStorage.setItem('code-quiz-scores', JSON.stringify(updatedScores))
+}
+
 function updateView(targetView) {
     // Turn all divs off.
     for (let mainDiv of mainDivs) {
@@ -232,7 +287,7 @@ function updateView(targetView) {
 
     // Don't display header if in highscores view.
     const headerDiv = document.querySelector('header')
-    if(targetView === "highscores") {
+    if (targetView === "highscores") {
         headerDiv.style.display = 'none';
     } else {
         headerDiv.style = 'header';
