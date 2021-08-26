@@ -25,7 +25,9 @@ header {
     border: 1px solid blue;
     background-color: lightblue;
 }
-
+#time {
+    display: inline;
+}
 
 main {
     border: 1px solid blue;

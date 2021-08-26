@@ -6,7 +6,8 @@
     Started at bottom once above has been loaded.
     */
 // GLOBAL VARIABLES ...
-let globalTimer = 0;
+let globalTimer = null;
+let timeInterval = null;
 let userScore = 0;
 let currentQuestionIndex = 0;
 
@@ -29,6 +30,7 @@ const rightWrongDiv = document.getElementById('right-wrong');
 const emailFormDiv = document.getElementById('email-form');
 const highScoreListDiv = document.getElementById('high-score-list');
 const goBackClearDiv = document.getElementById('go-back-clear');
+const timeDiv = document.getElementById('time');
 
 // Adding event listeners.
 highScoresButton.addEventListener('click', viewHighScoresClicked);
@@ -142,6 +144,7 @@ function showDoneView() {
     // Update text content.
     mainTextDiv.textContent = 'All Done!';
     subTextDiv.textContent = 'Your score is:' + userScore;
+    document.getElementById('initialsTextfield').textContent = '';
 }
 function showHighScoresView() {
     updateView('highscores');
@@ -168,13 +171,14 @@ function showRightWrongMessage(isCorrectAnswer) {
     rightWrongDiv.style.display = 'block';
     rightWrongDiv.textContent = result;
 }
+function updateTimeDisplay() {
+    timeDiv.textContent = globalTimer;
+}
 
 // EVENT HANDLERS //////////////////////////////////////////////////
 function startClicked() {
-    console.log('now in startClicked()')
+    startTimer();
     showQuestionView();
-
-    // chnage view to question
 }
 function answerClicked(event) {
     const target = event.target;
@@ -189,10 +193,13 @@ function answerClicked(event) {
         userScore++;
     } else {
         globalTimer -= 10;
+        if (globalTimer <= 0) {
+            endGame();
+        }
     }
     showRightWrongMessage(isCorrectAnswer);
 
-    // Display right/wrong for 3 seconds before proceeding.
+    // Display right/wrong for n seconds before proceeding.
     setTimeout(() => {
         // Are we out of questions?
         if (currentQuestionIndex === data.questions.length - 1) {
@@ -201,7 +208,7 @@ function answerClicked(event) {
             currentQuestionIndex++;
             showQuestionView();
         }
-    }, 1500);
+    }, 1250);
 }
 function nextQuestionClicked() {
     console.log('now in nextQuestionClicked')
@@ -236,31 +243,10 @@ function init() {
     showStartView();
     //    localStorage.setItem('code-quiz-scores', JSON.stringify(data.scores))
 }
-// console.log('hi')
-// localStorage.setItem('code-quiz-scores', JSON.stringify(data.scores))
-// const myScores = localStorage.getItem('code-quiz-scores');
-// console.log('myScores', myScores)
-// const parsedScores = JSON.parse(myScores);
-// console.log('parsedScores', parsedScores);
-// for(let i=0 ; i<parsedScores.length ; i++) {
-//     console.log('iter:', parsedScores[i].score)
-// }
-// const mySortedScores = parsedScores.sort((element1, element2) => {
-//     return element1.score - element2.score;
-// });
-// for(let i=0 ; i<mySortedScores.length ; i++) {
-//     console.log('mySortedScores:', mySortedScores[i].score)
-// }
-
-
-
-
 function getScores() {
     // Get scores from local storage or empty array if undefined.
     const scores = localStorage.getItem('code-quiz-scores');
     if (!scores) return [];
-    // console.log('type:', typeof scores)
-    // console.log('scores:', scores)
     return JSON.parse(scores);
 }
 function updateScores(score) {
@@ -300,13 +286,21 @@ function updateView(targetView) {
     }
 }
 function startTimer() {
-    // set global timer.
-    // setTimeout()
-    // if global < 0, then clearTimeout & endGame()
-    return;
+    globalTimer = 10;
+
+    timeInterval = setInterval(() => {
+        // decrement global time
+        globalTimer--;
+        // if global < 0, then clearTimeout & endGame()
+        if (globalTimer <= 0) {
+            endGame();
+        }
+        updateTimeDisplay();
+    }, 1000);
 }
 function endGame() {
-    // 
+    clearInterval(timeInterval);
+    showDoneView();
 }
 
 // Start the app.
