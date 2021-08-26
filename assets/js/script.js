@@ -8,6 +8,7 @@
 // GLOBAL VARIABLES ...
 let globalTimer = null;
 let timeInterval = null;
+let rightWrongTimeout = null; 
 let userScore = 0;
 let currentQuestionIndex = 0;
 
@@ -17,7 +18,6 @@ const startButton = document.getElementById('startButton');
 const goBackButton = document.getElementById('goBackButton');
 const clearButton = document.getElementById('clearButton');
 const submitButton = document.getElementById('submit');
-const nextQuestionButton = document.getElementById('nextQuestion');
 
 // Variables for views that get turned on/off.
 const mainDivs = document.querySelector('main').children;
@@ -36,17 +36,16 @@ const timeDiv = document.getElementById('time');
 highScoresButton.addEventListener('click', viewHighScoresClicked);
 startButton.addEventListener('click', startClicked);
 submitButton.addEventListener('click', submitClicked);
-nextQuestionButton.addEventListener('click', nextQuestionClicked);
 goBackButton.addEventListener('click', goBackClicked);
 clearButton.addEventListener('click', clearClicked);
 
 // DATA //////////////////////////////////////////////////////////////////
 let data = {
-    scores: [
-        { initials: "KH", score: 8 },
-        { initials: "OY", score: 4 },
-        { initials: "NG", score: 11 }
-    ],
+    // scores: [
+    //     { initials: "KH", score: 8 },
+    //     { initials: "OY", score: 4 },
+    //     { initials: "NG", score: 11 }
+    // ],
 
     questions: [
         {
@@ -127,6 +126,7 @@ function showQuestionView() {
 
     answersUl = document.createElement('ul');
     answersUl.setAttribute('id', 'answer-list');
+    answersUl.setAttribute('class', 'answers');
     answersDiv.append(answersUl);
     for (let i = 0; i < answers.length; i++) {
         const li = document.createElement('li');
@@ -134,6 +134,7 @@ function showQuestionView() {
         button.innerHTML = answers[i];
         // Add custom data attribute to be picked up by listener later.
         button.setAttribute('data-answer-index', i);
+        button.setAttribute('class', 'answer-button');
         li.appendChild(button);
         answersUl.appendChild(li);
     }
@@ -200,7 +201,7 @@ function answerClicked(event) {
     showRightWrongMessage(isCorrectAnswer);
 
     // Display right/wrong for n seconds before proceeding.
-    setTimeout(() => {
+    rightWrongTimeout = setTimeout(() => {
         // Are we out of questions?
         if (currentQuestionIndex === data.questions.length - 1) {
             showDoneView();
@@ -209,12 +210,6 @@ function answerClicked(event) {
             showQuestionView();
         }
     }, 1250);
-}
-function nextQuestionClicked() {
-    console.log('now in nextQuestionClicked')
-    // show pass/fail thing.
-
-    showDoneView();
 }
 function submitClicked() {
     // get values
@@ -286,7 +281,7 @@ function updateView(targetView) {
     }
 }
 function startTimer() {
-    globalTimer = 10;
+    globalTimer = 100;
 
     timeInterval = setInterval(() => {
         // decrement global time
@@ -299,6 +294,7 @@ function startTimer() {
     }, 1000);
 }
 function endGame() {
+    clearTimeout(rightWrongTimeout);
     clearInterval(timeInterval);
     showDoneView();
 }
