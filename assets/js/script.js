@@ -41,12 +41,6 @@ clearButton.addEventListener('click', clearClicked);
 
 // DATA //////////////////////////////////////////////////////////////////
 let data = {
-    // scores: [
-    //     { initials: "KH", score: 8 },
-    //     { initials: "OY", score: 4 },
-    //     { initials: "NG", score: 11 }
-    // ],
-
     questions: [
         {
             question: "Which of the following is NOT a JS data type?",
@@ -236,7 +230,6 @@ function viewHighScoresClicked() {
 // UTILITY FUNCTIONS //////////////////////////////////////////////////
 function init() {
     showStartView();
-    //    localStorage.setItem('code-quiz-scores', JSON.stringify(data.scores))
 }
 function getScores() {
     // Get scores from local storage or empty array if undefined.

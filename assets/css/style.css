@@ -1,5 +1,4 @@
 body {
-    /* background-color: cornflowerblue; */
     font-family: Arial, Helvetica, sans-serif;
     font-size: 1.5em;
     background-color: black;
@@ -12,22 +11,15 @@ body {
 }
 
 header {
-    /* border: 1px solid blue; */
     background-color: white;
     display: flex;
     justify-content: space-between;
 }
 
 #high-scores {
-    /* border: 1px solid blue; */
-    /* background-color: lightblue; */
     color: purple;
 }
 
-#timer {
-    /* border: 1px solid blue;
-    background-color: lightblue; */
-}
 #time {
     display: inline;
 }
@@ -35,23 +27,10 @@ header {
 main {
     border: 1px solid blue;
     background-color: white;
-    
 }
 
 #main-text {
-    /* border: 1px solid blue;
-    background-color: lightblue; */
     text-align: center;
-}
-
-#sub-text {
-    /* border: 1px solid blue;
-    background-color: lightblue; */
-}
-
-#start-button {
-    /* border: 1px solid blue; */
-    /* background-color: lightblue; */
 }
 
 button {
@@ -64,18 +43,10 @@ button:hover {
     transition-duration: 0.4s;
     cursor: pointer;
     box-shadow: 20px 20px 50px 15px rgb(209, 107, 209);
-
 }
-#question {
-    /* border: 1px solid blue;
-    background-color: lightblue; */
-}
-
 .answers {
     list-style-type: none;
     width: 200px;
-    /* border: 1px solid blue;
-    background-color: lightblue; */
 }
 .answer-button {
     width: 250px;
@@ -83,37 +54,10 @@ button:hover {
 
 #right-wrong {
     text-align: center;
-        /* border: 1px solid blue;
-    background-color: lightblue; */
-}
-
-#email-form {
-    /* border: 1px solid blue;
-    background-color: lightblue; */
-}
-
-#high-score-list {
-    /* border: 1px solid blue;
-    background-color: lightblue; */
 }
 
 #high-score-list li {
     background-color: rgb(209, 107, 209);;
     list-style-type: none;
 }
-
-#go-back-clear {
-    /* border: 1px solid blue; */
-    /* background-color: lightblue; */
-}
-
-
-
-
-
-
-
-
-
-
 
